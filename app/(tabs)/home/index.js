@@ -6,7 +6,7 @@ import React from "react";
 const index = () => {
   return (
     <View>
-      <Text>Calender</Text>
+      <Text>home</Text>
     </View>
   );
 };
