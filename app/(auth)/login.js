@@ -31,12 +31,11 @@ const login = () => {
           <View style={styles.textInputView}>
             <MaterialIcons
               name="email"
-              size={24}
-              color="Gray"
-              style={{ marginLeft: 10 }}
+              size={18}
+              style={{ marginLeft: 15, color: "Gray" }}
             />
             <TextInput
-              style={[styles.textInput, { fontSize: email ? 17 : 17 }]}
+              style={styles.textInput}
               value={email}
               onChangeText={setEmail}
               placeholder="Enter your Email"
@@ -45,12 +44,11 @@ const login = () => {
           <View style={styles.textInputView}>
             <MaterialIcons
               name="lock"
-              size={24}
-              color="Gray"
-              style={{ marginLeft: 10 }}
+              size={18}
+              style={{ marginLeft: 15, color: "Gray" }}
             />
             <TextInput
-              style={[styles.textInput, { fontSize: email ? 17 : 17 }]}
+              style={styles.textInput}
               value={password}
               onChangeText={setPassword}
               placeholder="Password"
@@ -62,7 +60,7 @@ const login = () => {
             <Text style={{ color: "#007fff" }}>Forgot Password</Text>
           </View>
 
-          <View style={{ marginTop: 60 }}>
+          <View style={{ marginTop: 30 }}>
             <Pressable
               style={{
                 width: 200,
@@ -72,7 +70,7 @@ const login = () => {
                 marginLeft: "auto",
                 marginRight: "auto",
               }}>
-              <Text style={styles.buttonText}>Login</Text>
+              <Text style={styles.buttonText}>Register</Text>
             </Pressable>
 
             <Text style={styles.signUptext}>
@@ -131,7 +129,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E0E0E0",
     paddingVertical: 5,
     borderRadius: 5,
-    marginTop: 30,
+    marginTop: 10,
   },
   textInput: {
     color: "gray",

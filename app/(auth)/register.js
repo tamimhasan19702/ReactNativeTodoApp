@@ -16,6 +16,7 @@ import { useRouter } from "expo-router";
 const register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const router = useRouter();
   return (
     <SafeAreaView style={styles.container}>
@@ -31,12 +32,11 @@ const register = () => {
           <View style={styles.textInputView}>
             <MaterialIcons
               name="email"
-              size={24}
-              color="Gray"
-              style={{ marginLeft: 10 }}
+              size={18}
+              style={{ marginLeft: 15, color: "Gray" }}
             />
             <TextInput
-              style={[styles.textInput, { fontSize: email ? 17 : 17 }]}
+              style={styles.textInput}
               value={email}
               onChangeText={setEmail}
               placeholder="Enter your Email"
@@ -45,24 +45,31 @@ const register = () => {
           <View style={styles.textInputView}>
             <MaterialIcons
               name="lock"
-              size={24}
-              color="Gray"
-              style={{ marginLeft: 10 }}
+              size={18}
+              style={{ marginLeft: 15, color: "Gray" }}
             />
             <TextInput
-              style={[styles.textInput, { fontSize: email ? 17 : 17 }]}
+              style={styles.textInput}
               value={password}
               onChangeText={setPassword}
               placeholder="Password"
             />
           </View>
-
-          <View style={styles.keepLoginView}>
-            <Text>Kepp me Logged in</Text>
-            <Text style={{ color: "#007fff" }}>Forgot Password</Text>
+          <View style={styles.textInputView}>
+            <MaterialIcons
+              name="lock"
+              size={18}
+              style={{ marginLeft: 15, color: "Gray" }}
+            />
+            <TextInput
+              style={styles.textInput}
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              placeholder="Confirm Password"
+            />
           </View>
 
-          <View style={{ marginTop: 60 }}>
+          <View style={{ marginTop: 30 }}>
             <Pressable
               style={{
                 width: 200,
@@ -76,8 +83,8 @@ const register = () => {
             </Pressable>
 
             <Text style={styles.signUptext}>
-              Already have an account?
-              <Pressable onPress={() => router.push("/login")}>
+              Don't have an account?
+              <Pressable onPress={() => router.push("/register")}>
                 <Text
                   style={{
                     color: "#007fff",
@@ -85,7 +92,7 @@ const register = () => {
                     textAlign: "center",
                     fontSize: 18,
                   }}>
-                  Sign in
+                  Sign up
                 </Text>
               </Pressable>
             </Text>
@@ -131,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E0E0E0",
     paddingVertical: 5,
     borderRadius: 5,
-    marginTop: 30,
+    marginTop: 10,
   },
   textInput: {
     color: "gray",
