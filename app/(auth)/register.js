@@ -14,6 +14,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
 const register = () => {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -29,6 +30,19 @@ const register = () => {
         </View>
 
         <View style={styles.textInputContainer}>
+          <View style={styles.textInputView}>
+            <MaterialIcons
+              name="person"
+              size={18}
+              style={{ marginLeft: 15, color: "Gray" }}
+            />
+            <TextInput
+              style={styles.textInput}
+              value={username}
+              onChangeText={setUsername}
+              placeholder="Enter your Username"
+            />
+          </View>
           <View style={styles.textInputView}>
             <MaterialIcons
               name="email"
@@ -83,16 +97,17 @@ const register = () => {
             </Pressable>
 
             <Text style={styles.signUptext}>
-              Don't have an account?
-              <Pressable onPress={() => router.push("/register")}>
+              Already have a account?
+              <Pressable onPress={() => router.push("/login")}>
                 <Text
                   style={{
                     color: "#007fff",
                     marginLeft: 8,
                     textAlign: "center",
                     fontSize: 18,
+                    alignSelf: "center",
                   }}>
-                  Sign up
+                  Sign in
                 </Text>
               </Pressable>
             </Text>

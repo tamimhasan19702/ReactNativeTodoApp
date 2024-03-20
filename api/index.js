@@ -8,6 +8,9 @@ const crypto = require("crypto");
 const app = express();
 const port = 1200;
 const cors = require("cors");
+
+const registerRoutes = require("./routes/register.routes");
+
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,3 +30,7 @@ mongoose
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+//adding all the routes
+
+app.use("/api", registerRoutes);
