@@ -10,6 +10,7 @@ const port = 1200;
 const cors = require("cors");
 
 const registerRoutes = require("./routes/register.routes");
+const loginRoutes = require("./routes/login.routes");
 
 app.use(cors());
 
@@ -34,3 +35,4 @@ app.listen(port, () => {
 //adding all the routes
 
 app.use("/api", registerRoutes);
+app.use("/api", loginRoutes);

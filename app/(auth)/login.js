@@ -32,7 +32,7 @@ const login = () => {
             <MaterialIcons
               name="email"
               size={18}
-              style={{ marginLeft: 15, color: "Gray" }}
+              style={{ marginLeft: 15, color: "gray" }}
             />
             <TextInput
               style={styles.textInput}
@@ -45,7 +45,7 @@ const login = () => {
             <MaterialIcons
               name="lock"
               size={18}
-              style={{ marginLeft: 15, color: "Gray" }}
+              style={{ marginLeft: 15, color: "gray" }}
             />
             <TextInput
               style={styles.textInput}
@@ -70,7 +70,7 @@ const login = () => {
                 marginLeft: "auto",
                 marginRight: "auto",
               }}>
-              <Text style={styles.buttonText}>Register</Text>
+              <Text style={styles.buttonText}>log in</Text>
             </Pressable>
 
             <Text style={styles.signUptext}>

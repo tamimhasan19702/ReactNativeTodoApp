@@ -1,24 +1,63 @@
 /** @format */
 
-import {
-  KeyboardAvoidingView,
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
 import React, { useState } from "react";
+import {
+  View,
+  TextInput,
+  Text,
+  Pressable,
+  StyleSheet,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  Alert,
+} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import axios from "axios";
 
-const register = () => {
+const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordMatchError, setPasswordMatchError] = useState("");
   const router = useRouter();
+
+  const handleRegister = () => {
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      setPasswordMatchError("Passwords do not match");
+      return;
+    }
+
+    // Reset password match error if passwords match
+    setPasswordMatchError("");
+
+    const user = {
+      username: username,
+      email: email,
+      password: password,
+    };
+
+    axios
+      .post("http://192.168.0.110:1200/api/register", user)
+      .then((response) => {
+        console.log(response);
+        Alert.alert(
+          "Registration Successful",
+          "You have successfully registered your account"
+        );
+        setEmail("");
+        setPassword("");
+        setUsername("");
+        setConfirmPassword("");
+      })
+      .catch((error) => {
+        Alert.alert("Registration Failed", "Failed to register your account");
+        console.log("regi error", error);
+      });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.loginView}>
@@ -26,7 +65,7 @@ const register = () => {
       </View>
       <KeyboardAvoidingView>
         <View style={styles.loginAvoidView}>
-          <Text style={styles.loginAvoidText}>Register To you account</Text>
+          <Text style={styles.loginAvoidText}>Register To your account</Text>
         </View>
 
         <View style={styles.textInputContainer}>
@@ -34,7 +73,7 @@ const register = () => {
             <MaterialIcons
               name="person"
               size={18}
-              style={{ marginLeft: 15, color: "Gray" }}
+              style={{ marginLeft: 15, color: "gray" }}
             />
             <TextInput
               style={styles.textInput}
@@ -47,7 +86,7 @@ const register = () => {
             <MaterialIcons
               name="email"
               size={18}
-              style={{ marginLeft: 15, color: "Gray" }}
+              style={{ marginLeft: 15, color: "gray" }}
             />
             <TextInput
               style={styles.textInput}
@@ -60,28 +99,34 @@ const register = () => {
             <MaterialIcons
               name="lock"
               size={18}
-              style={{ marginLeft: 15, color: "Gray" }}
+              style={{ marginLeft: 15, color: "gray" }}
             />
             <TextInput
               style={styles.textInput}
               value={password}
               onChangeText={setPassword}
               placeholder="Password"
+              secureTextEntry
             />
           </View>
           <View style={styles.textInputView}>
             <MaterialIcons
               name="lock"
               size={18}
-              style={{ marginLeft: 15, color: "Gray" }}
+              style={{ marginLeft: 15, color: "gray" }}
             />
             <TextInput
               style={styles.textInput}
               value={confirmPassword}
               onChangeText={setConfirmPassword}
               placeholder="Confirm Password"
+              secureTextEntry
             />
           </View>
+
+          {passwordMatchError ? (
+            <Text style={styles.errorText}>{passwordMatchError}</Text>
+          ) : null}
 
           <View style={{ marginTop: 30 }}>
             <Pressable
@@ -92,12 +137,13 @@ const register = () => {
                 borderRadius: 6,
                 marginLeft: "auto",
                 marginRight: "auto",
-              }}>
-              <Text style={styles.buttonText}>Login</Text>
+              }}
+              onPress={handleRegister}>
+              <Text style={styles.buttonText}>Register</Text>
             </Pressable>
 
             <Text style={styles.signUptext}>
-              Already have a account?
+              Already have an account?
               <Pressable onPress={() => router.push("/login")}>
                 <Text
                   style={{
@@ -118,7 +164,7 @@ const register = () => {
   );
 };
 
-export default register;
+export default Register;
 
 const styles = StyleSheet.create({
   container: {
@@ -160,12 +206,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: 300,
   },
-  keepLoginView: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 12,
-    justifyContent: "space-between",
-  },
   buttonText: {
     textAlign: "center",
     color: "white",
@@ -180,5 +220,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 18,
     color: "gray",
+  },
+  errorText: {
+    color: "red",
+    textAlign: "center",
+    marginTop: 10,
   },
 });
