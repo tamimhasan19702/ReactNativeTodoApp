@@ -1,6 +1,7 @@
 /** @format */
 
 import {
+  Alert,
   KeyboardAvoidingView,
   Pressable,
   SafeAreaView,
@@ -9,14 +10,50 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import axios from "axios";
+import { AsyncStorage } from "react-native";
 
 const login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem("authToken");
+        if (token) {
+          router.replace("(tabs)/home");
+        }
+      } catch (error) {
+        console.error("Error checking login status:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  const handleLogin = () => {
+    const user = {
+      email,
+      password,
+    };
+    const router = useRouter();
+
+    axios
+      .post("http://192.168.0.110:1200/api/login", user)
+      .then((response) => {
+        const token = response.data.token;
+        AsyncStorage.setItem("authToken", token);
+        router.replace("(tabs)/home");
+        Alert.alert("Login Successful");
+      })
+      .catch((error) => {
+        Alert.alert("Login Failed", error.response.data.message);
+      });
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.loginView}>
@@ -62,6 +99,7 @@ const login = () => {
 
           <View style={{ marginTop: 30 }}>
             <Pressable
+              onPress={handleLogin}
               style={{
                 width: 200,
                 backgroundColor: "#6699cc",
