@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   SafeAreaView,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -40,7 +41,7 @@ const Register = () => {
     };
 
     axios
-      .post("http://192.168.0.110:1200/api/register", user)
+      .post("http://192.168.1.102:1200/api/register", user)
       .then((response) => {
         console.log(response);
         Alert.alert(
@@ -54,7 +55,7 @@ const Register = () => {
       })
       .catch((error) => {
         Alert.alert("Registration Failed", "Failed to register your account");
-        console.log("regi error", error);
+        console.log("registration error", error);
       });
   };
 
@@ -129,7 +130,7 @@ const Register = () => {
           ) : null}
 
           <View style={{ marginTop: 30 }}>
-            <Pressable
+            <TouchableOpacity
               style={{
                 width: 200,
                 backgroundColor: "#6699cc",
@@ -140,7 +141,7 @@ const Register = () => {
               }}
               onPress={handleRegister}>
               <Text style={styles.buttonText}>Register</Text>
-            </Pressable>
+            </TouchableOpacity>
 
             <Text style={styles.signUptext}>
               Already have an account?

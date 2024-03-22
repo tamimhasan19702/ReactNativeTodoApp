@@ -1,5 +1,6 @@
 /** @format */
 
+import React, { useState, useEffect } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -10,13 +11,12 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import axios from "axios";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const login = () => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -35,15 +35,15 @@ const login = () => {
 
     fetchData();
   }, []);
+
   const handleLogin = () => {
     const user = {
       email,
       password,
     };
-    const router = useRouter();
 
     axios
-      .post("http://192.168.0.110:1200/api/login", user)
+      .post("http://192.168.1.102:1200/api/login", user)
       .then((response) => {
         const token = response.data.token;
         AsyncStorage.setItem("authToken", token);
@@ -54,6 +54,7 @@ const login = () => {
         Alert.alert("Login Failed", error.response.data.message);
       });
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.loginView}>
@@ -61,7 +62,7 @@ const login = () => {
       </View>
       <KeyboardAvoidingView>
         <View style={styles.loginAvoidView}>
-          <Text style={styles.loginAvoidText}>Login To you account</Text>
+          <Text style={styles.loginAvoidText}>Login To your account</Text>
         </View>
 
         <View style={styles.textInputContainer}>
@@ -93,7 +94,7 @@ const login = () => {
           </View>
 
           <View style={styles.keepLoginView}>
-            <Text>Kepp me Logged in</Text>
+            <Text>Keep me Logged in</Text>
             <Text style={{ color: "#007fff" }}>Forgot Password</Text>
           </View>
 
@@ -108,10 +109,10 @@ const login = () => {
                 marginLeft: "auto",
                 marginRight: "auto",
               }}>
-              <Text style={styles.buttonText}>log in</Text>
+              <Text style={styles.buttonText}>Log in</Text>
             </Pressable>
 
-            <Text style={styles.signUptext}>
+            <Text style={styles.signUpText}>
               Don't have an account?
               <Pressable onPress={() => router.push("/register")}>
                 <Text
@@ -132,7 +133,7 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;
 
 const styles = StyleSheet.create({
   container: {
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  signUptext: {
+  signUpText: {
     marginTop: 20,
     textAlign: "center",
     fontSize: 18,

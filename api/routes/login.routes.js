@@ -5,6 +5,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
+const jwt = require("jsonwebtoken");
 
 const generateSecretKey = () => {
   const secretKey = crypto.randomBytes(32).toString("hex");
