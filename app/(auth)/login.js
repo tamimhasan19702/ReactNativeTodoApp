@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -114,7 +115,7 @@ const Login = () => {
 
             <Text style={styles.signUpText}>
               Don't have an account?
-              <Pressable onPress={() => router.push("/register")}>
+              <TouchableOpacity onPress={() => router.push("/register")}>
                 <Text
                   style={{
                     color: "#007fff",
@@ -124,7 +125,7 @@ const Login = () => {
                   }}>
                   Sign up
                 </Text>
-              </Pressable>
+              </TouchableOpacity>
             </Text>
           </View>
         </View>

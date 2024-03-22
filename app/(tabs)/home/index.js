@@ -1,27 +1,35 @@
 /** @format */
 
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
+import React, { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { Image } from "react-native";
 
 const index = () => {
   const todos = [];
+  const [isVisible, setIsVisible] = useState(false);
   return (
     <>
       <View style={styles.container}>
-        <Pressable style={styles.press}>
+        <TouchableOpacity style={styles.press}>
           <Text style={styles.text}>All</Text>
-        </Pressable>
-        <Pressable style={styles.press}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.press}>
           <Text style={styles.text}>Work</Text>
-        </Pressable>
-        <Pressable style={[styles.press, { marginRight: "auto" }]}>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.press, { marginRight: "auto" }]}>
           <Text style={styles.text}>Personal</Text>
-        </Pressable>
-        <Pressable>
+        </TouchableOpacity>
+        <TouchableOpacity>
           <AntDesign name="pluscircle" size={30} color="#007fff" />
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.scroller}>
@@ -39,9 +47,9 @@ const index = () => {
               <Text style={styles.noTodoText}>
                 No Task added for today!! add a task
               </Text>
-              <Pressable>
+              <TouchableOpacity>
                 <AntDesign name="pluscircle" size={30} color="#007fff" />
-              </Pressable>
+              </TouchableOpacity>
             </View>
           )}
         </View>
