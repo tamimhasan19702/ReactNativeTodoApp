@@ -18,11 +18,18 @@ import {
   ModalTitle,
   SlideAnimation,
 } from "react-native-modals";
-
 const index = () => {
   const todos = [];
   const [isVisible, setIsVisible] = useState(false);
   const [todo, setTodo] = useState({});
+  const suggestions = [
+    { id: 1, todo: "Take out the trash" },
+    { id: 2, todo: "Pay rent" },
+    { id: 3, todo: "Go to the gym" },
+    { id: 4, todo: "Buy groceries" },
+    { id: 5, todo: "Finish course work" },
+    { id: 6, todo: "Do laundry" },
+  ];
   return (
     <>
       <View style={styles.container}>
@@ -64,8 +71,8 @@ const index = () => {
       </ScrollView>
 
       <BottomModal
-        onBackDropPress={() => setIsVisible(isVisible)}
-        onHardwareBackPress={() => setIsVisible(isVisible)}
+        onBackdropPress={() => setIsVisible(false)}
+        onHardwareBackPress={() => setIsVisible(false)}
         swipeDirection={["up", "down"]}
         swipeThreshold={200}
         modalTitle={<ModalTitle title="Add a Todo Task" />}
@@ -75,8 +82,8 @@ const index = () => {
           })
         }
         visible={isVisible}
-        onTouchOutside={() => setIsVisible(isVisible)}>
-        <ModalContent style={{ width: "100%", height: 200 }}>
+        onTouchOutside={() => setIsVisible(false)}>
+        <ModalContent style={{ width: "100%", height: 280 }}>
           <View
             style={{
               marginVertical: 10,
@@ -97,6 +104,76 @@ const index = () => {
               }}
             />
             <Ionicons name="send" size={28} color="#7cb9e8" />
+          </View>
+
+          <Text>Choose Category</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 10,
+              alignItems: "center",
+              marginVertical: 10,
+            }}>
+            <TouchableOpacity
+              style={{
+                borderWidth: 1.5,
+                paddingHorizontal: 14,
+                borderColor: "#7cb9e8",
+                paddingVertical: 6,
+                padding: 10,
+                borderRadius: 5,
+              }}>
+              <Text>Work</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                borderWidth: 1.5,
+                paddingHorizontal: 14,
+                borderColor: "#7cb9e8",
+                paddingVertical: 6,
+                padding: 10,
+                borderRadius: 5,
+              }}>
+              <Text>personal</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                borderWidth: 1.5,
+                paddingHorizontal: 14,
+                borderColor: "#7cb9e8",
+                paddingVertical: 6,
+                padding: 10,
+                borderRadius: 5,
+              }}>
+              <Text>Wishlist</Text>
+            </TouchableOpacity>
+          </View>
+
+          <Text>Some Suggestions</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 10,
+              alignItems: "center",
+              flexWrap: "wrap",
+              marginVertical: 10,
+            }}>
+            {suggestions?.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  style={{
+                    borderWidth: 1.5,
+                    paddingHorizontal: 14,
+                    borderColor: "#7cb9e8",
+                    paddingVertical: 6,
+                    padding: 10,
+                    borderRadius: 5,
+                  }}>
+                  <Text>{item?.todo}</Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
         </ModalContent>
       </BottomModal>
