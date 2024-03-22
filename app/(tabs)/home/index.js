@@ -21,6 +21,7 @@ import {
 const index = () => {
   const todos = [];
   const [isVisible, setIsVisible] = useState(false);
+  const [category, setCategory] = useState("All");
   const [todo, setTodo] = useState({});
   const suggestions = [
     { id: 1, todo: "Take out the trash" },
@@ -30,6 +31,17 @@ const index = () => {
     { id: 5, todo: "Finish course work" },
     { id: 6, todo: "Do laundry" },
   ];
+
+  const addTodo = () => {
+    try {
+      const todoData = {
+        title: todo,
+        category: category,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <View style={styles.container}>
@@ -103,7 +115,7 @@ const index = () => {
                 flex: 1,
               }}
             />
-            <Ionicons name="send" size={28} color="#7cb9e8" />
+            <Ionicons onPress={addTodo} name="send" size={28} color="#7cb9e8" />
           </View>
 
           <Text>Choose Category</Text>
@@ -115,6 +127,7 @@ const index = () => {
               marginVertical: 10,
             }}>
             <TouchableOpacity
+              onPress={() => setCategory("work")}
               style={{
                 borderWidth: 1.5,
                 paddingHorizontal: 14,
@@ -126,6 +139,7 @@ const index = () => {
               <Text>Work</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => setCategory("personal")}
               style={{
                 borderWidth: 1.5,
                 paddingHorizontal: 14,
@@ -134,9 +148,10 @@ const index = () => {
                 padding: 10,
                 borderRadius: 5,
               }}>
-              <Text>personal</Text>
+              <Text>Personal</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => setCategory("wishlist")}
               style={{
                 borderWidth: 1.5,
                 paddingHorizontal: 14,
