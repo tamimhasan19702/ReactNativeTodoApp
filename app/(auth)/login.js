@@ -91,6 +91,7 @@ const Login = () => {
               value={password}
               onChangeText={setPassword}
               placeholder="Password"
+              secureTextEntry
             />
           </View>
 
