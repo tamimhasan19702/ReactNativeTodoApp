@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { Image } from "react-native";
 import {
@@ -21,10 +21,13 @@ import {
 import axios from "axios";
 
 const index = () => {
-  const todos = [];
+  const [todos, setTodos] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const [category, setCategory] = useState("All");
   const [todo, setTodo] = useState({});
+  const [pendingTodos, setPendingTodos] = useState([]);
+  const [completedTodos, setCompletedTodos] = useState([]);
+  const [marked, setMarked] = useState(false);
   const suggestions = [
     { id: 1, todo: "Take out the trash" },
     { id: 2, todo: "Pay rent" },
@@ -33,6 +36,34 @@ const index = () => {
     { id: 5, todo: "Finish course work" },
     { id: 6, todo: "Do laundry" },
   ];
+
+  const getUserTodo = async () => {
+    try {
+      const response = await axios.get(
+        `http://192.168.1.106:1200/api/users/660190701a989a15d2916822/todos`
+      );
+      console.log(response.data.todos);
+      setTodos(response.data.todos);
+
+      const fetchedTodos = response.data.todos || [];
+
+      const pending = fetchedTodos.filter(
+        (todo) => todo.status !== "completed"
+      );
+
+      const completed = fetchedTodos.filter(
+        (todo) => todo.status === "completed"
+      );
+      setPendingTodos(pending);
+      setCompletedTodos(completed);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getUserTodo();
+  }, []);
 
   const addTodo = async () => {
     try {
@@ -59,6 +90,21 @@ const index = () => {
       console.log(error);
     }
   };
+
+  const markTodosCompleted = async (todoId) => {
+    try {
+      setMarked(true);
+      const response = await axios.patch(
+        `http://192.168.1.106:1200/api/todos/${todoId}/complete`
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log("completed todos", completedTodos);
+  console.log("pending todos", pendingTodos);
   return (
     <>
       <View style={styles.container}>
@@ -79,7 +125,7 @@ const index = () => {
       <ScrollView style={styles.scroller}>
         <View style={styles.scrollContainer}>
           {todos?.length > 0 ? (
-            <View></View>
+            <View>{pendingTodos?.length > 0 && <Text>tasks to Do!</Text>}</View>
           ) : (
             <View style={styles.noTodoContainer}>
               <Image
