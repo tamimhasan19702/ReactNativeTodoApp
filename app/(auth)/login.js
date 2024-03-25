@@ -1,6 +1,5 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -9,15 +8,15 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
+import React, { useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Login = () => {
+const login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -25,7 +24,7 @@ const Login = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = await AsyncStorage.getItem("authToken");
+        const token = await AsyncStorage.getItem("Token");
         if (token) {
           router.replace("(tabs)/home");
         }
@@ -44,10 +43,10 @@ const Login = () => {
     };
 
     axios
-      .post("http://192.168.1.102:1200/api/login", user)
+      .post(`${process.env.LOCALHOST}/login`, user) // Using the variable from .env file
       .then((response) => {
         const token = response.data.token;
-        AsyncStorage.setItem("authToken", token);
+        AsyncStorage.setItem("Token", token);
         router.replace("(tabs)/home");
         Alert.alert("Login Successful");
       })
@@ -55,7 +54,6 @@ const Login = () => {
         Alert.alert("Login Failed", error.response.data.message);
       });
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.loginView}>
@@ -63,7 +61,7 @@ const Login = () => {
       </View>
       <KeyboardAvoidingView>
         <View style={styles.loginAvoidView}>
-          <Text style={styles.loginAvoidText}>Login To your account</Text>
+          <Text style={styles.loginAvoidText}>Login To you account</Text>
         </View>
 
         <View style={styles.textInputContainer}>
@@ -87,16 +85,16 @@ const Login = () => {
               style={{ marginLeft: 15, color: "gray" }}
             />
             <TextInput
+              secureTextEntry
               style={styles.textInput}
               value={password}
               onChangeText={setPassword}
               placeholder="Password"
-              secureTextEntry
             />
           </View>
 
           <View style={styles.keepLoginView}>
-            <Text>Keep me Logged in</Text>
+            <Text>Kepp me Logged in</Text>
             <Text style={{ color: "#007fff" }}>Forgot Password</Text>
           </View>
 
@@ -111,12 +109,12 @@ const Login = () => {
                 marginLeft: "auto",
                 marginRight: "auto",
               }}>
-              <Text style={styles.buttonText}>Log in</Text>
+              <Text style={styles.buttonText}>log in</Text>
             </Pressable>
 
-            <Text style={styles.signUpText}>
+            <Text style={styles.signUptext}>
               Don't have an account?
-              <TouchableOpacity onPress={() => router.push("/register")}>
+              <Pressable onPress={() => router.push("/register")}>
                 <Text
                   style={{
                     color: "#007fff",
@@ -126,7 +124,7 @@ const Login = () => {
                   }}>
                   Sign up
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             </Text>
           </View>
         </View>
@@ -135,7 +133,7 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default login;
 
 const styles = StyleSheet.create({
   container: {
@@ -192,7 +190,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  signUpText: {
+  signUptext: {
     marginTop: 20,
     textAlign: "center",
     fontSize: 18,

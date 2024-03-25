@@ -14,7 +14,6 @@ const cors = require("cors");
 
 const registerRoutes = require("./routes/register.routes");
 const loginRoutes = require("./routes/login.routes");
-const todoRoutes = require("./routes/todo.routes");
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -38,4 +37,3 @@ app.listen(port, () => {
 
 app.use("/api", registerRoutes);
 app.use("/api", loginRoutes);
-app.use("/api", todoRoutes);

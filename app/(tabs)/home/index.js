@@ -18,6 +18,8 @@ import {
   ModalTitle,
   SlideAnimation,
 } from "react-native-modals";
+import axios from "axios";
+
 const index = () => {
   const todos = [];
   const [isVisible, setIsVisible] = useState(false);
@@ -34,10 +36,6 @@ const index = () => {
 
   const addTodo = () => {
     try {
-      const todoData = {
-        title: todo,
-        category: category,
-      };
     } catch (error) {
       console.log(error);
     }
@@ -176,6 +174,7 @@ const index = () => {
             {suggestions?.map((item, index) => {
               return (
                 <TouchableOpacity
+                  onPress={() => setTodo(item?.todo)}
                   key={index}
                   style={{
                     borderWidth: 1.5,
