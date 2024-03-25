@@ -40,7 +40,7 @@ const Register = () => {
     };
 
     axios
-      .post(`${process.env.LOCALHOST}/register`, user)
+      .post(`http://192.168.1.106:1200/api//register`, user)
       .then((response) => {
         console.log(response);
         Alert.alert(

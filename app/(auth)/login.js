@@ -24,7 +24,7 @@ const login = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = await AsyncStorage.getItem("Token");
+        const token = await AsyncStorage.getItem("authToken");
         if (token) {
           router.replace("(tabs)/home");
         }
@@ -43,10 +43,10 @@ const login = () => {
     };
 
     axios
-      .post(`${process.env.LOCALHOST}/login`, user) // Using the variable from .env file
+      .post(`http://192.168.1.106:1200/api/login`, user) // Using the variable from .env file
       .then((response) => {
         const token = response.data.token;
-        AsyncStorage.setItem("Token", token);
+        AsyncStorage.setItem("authToken", token);
         router.replace("(tabs)/home");
         Alert.alert("Login Successful");
       })

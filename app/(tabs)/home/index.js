@@ -34,8 +34,27 @@ const index = () => {
     { id: 6, todo: "Do laundry" },
   ];
 
-  const addTodo = () => {
+  const addTodo = async () => {
     try {
+      const todoData = {
+        title: todo,
+        category: category,
+      };
+
+      await axios
+        .post(
+          `http://192.168.1.106:1200/api/todos/660190701a989a15d2916822`,
+          todoData
+        )
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error, "here");
+        });
+
+      setIsVisible(false);
+      setTodo("");
     } catch (error) {
       console.log(error);
     }
@@ -113,7 +132,9 @@ const index = () => {
                 flex: 1,
               }}
             />
-            <Ionicons onPress={addTodo} name="send" size={28} color="#7cb9e8" />
+            <TouchableOpacity onPress={addTodo}>
+              <Ionicons name="send" size={28} color="#7cb9e8" />
+            </TouchableOpacity>
           </View>
 
           <Text>Choose Category</Text>
