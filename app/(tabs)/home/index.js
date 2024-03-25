@@ -1,27 +1,60 @@
 /** @format */
 
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { AntDesign } from "@expo/vector-icons";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
+import React, { useState } from "react";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { Image } from "react-native";
+import {
+  BottomModal,
+  ModalContent,
+  ModalTitle,
+  SlideAnimation,
+} from "react-native-modals";
+import axios from "axios";
 
 const index = () => {
   const todos = [];
+  const [isVisible, setIsVisible] = useState(false);
+  const [category, setCategory] = useState("All");
+  const [todo, setTodo] = useState({});
+  const suggestions = [
+    { id: 1, todo: "Take out the trash" },
+    { id: 2, todo: "Pay rent" },
+    { id: 3, todo: "Go to the gym" },
+    { id: 4, todo: "Buy groceries" },
+    { id: 5, todo: "Finish course work" },
+    { id: 6, todo: "Do laundry" },
+  ];
+
+  const addTodo = () => {
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <View style={styles.container}>
-        <Pressable style={styles.press}>
+        <TouchableOpacity style={styles.press}>
           <Text style={styles.text}>All</Text>
-        </Pressable>
-        <Pressable style={styles.press}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.press}>
           <Text style={styles.text}>Work</Text>
-        </Pressable>
-        <Pressable style={[styles.press, { marginRight: "auto" }]}>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.press, { marginRight: "auto" }]}>
           <Text style={styles.text}>Personal</Text>
-        </Pressable>
-        <Pressable>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
           <AntDesign name="pluscircle" size={30} color="#007fff" />
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.scroller}>
@@ -39,13 +72,125 @@ const index = () => {
               <Text style={styles.noTodoText}>
                 No Task added for today!! add a task
               </Text>
-              <Pressable>
+              <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
                 <AntDesign name="pluscircle" size={30} color="#007fff" />
-              </Pressable>
+              </TouchableOpacity>
             </View>
           )}
         </View>
       </ScrollView>
+
+      <BottomModal
+        onBackdropPress={() => setIsVisible(false)}
+        onHardwareBackPress={() => setIsVisible(false)}
+        swipeDirection={["up", "down"]}
+        swipeThreshold={200}
+        modalTitle={<ModalTitle title="Add a Todo Task" />}
+        modalAnimation={
+          new SlideAnimation({
+            slideFrom: "bottom",
+          })
+        }
+        visible={isVisible}
+        onTouchOutside={() => setIsVisible(false)}>
+        <ModalContent style={{ width: "100%", height: 280 }}>
+          <View
+            style={{
+              marginVertical: 10,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 10,
+            }}>
+            <TextInput
+              value={todo}
+              onChangeText={(text) => setTodo(text)}
+              placeholder="Enter a new Todo here"
+              style={{
+                padding: 10,
+                borderColor: "#7cb9e8",
+                borderWidth: 1.5,
+                borderRadius: 5,
+                flex: 1,
+              }}
+            />
+            <Ionicons onPress={addTodo} name="send" size={28} color="#7cb9e8" />
+          </View>
+
+          <Text>Choose Category</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 10,
+              alignItems: "center",
+              marginVertical: 10,
+            }}>
+            <TouchableOpacity
+              onPress={() => setCategory("work")}
+              style={{
+                borderWidth: 1.5,
+                paddingHorizontal: 14,
+                borderColor: "#7cb9e8",
+                paddingVertical: 6,
+                padding: 10,
+                borderRadius: 5,
+              }}>
+              <Text>Work</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setCategory("personal")}
+              style={{
+                borderWidth: 1.5,
+                paddingHorizontal: 14,
+                borderColor: "#7cb9e8",
+                paddingVertical: 6,
+                padding: 10,
+                borderRadius: 5,
+              }}>
+              <Text>Personal</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setCategory("wishlist")}
+              style={{
+                borderWidth: 1.5,
+                paddingHorizontal: 14,
+                borderColor: "#7cb9e8",
+                paddingVertical: 6,
+                padding: 10,
+                borderRadius: 5,
+              }}>
+              <Text>Wishlist</Text>
+            </TouchableOpacity>
+          </View>
+
+          <Text>Some Suggestions</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 10,
+              alignItems: "center",
+              flexWrap: "wrap",
+              marginVertical: 10,
+            }}>
+            {suggestions?.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => setTodo(item?.todo)}
+                  key={index}
+                  style={{
+                    borderWidth: 1.5,
+                    paddingHorizontal: 14,
+                    borderColor: "#7cb9e8",
+                    paddingVertical: 6,
+                    padding: 10,
+                    borderRadius: 5,
+                  }}>
+                  <Text>{item?.todo}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ModalContent>
+      </BottomModal>
     </>
   );
 };

@@ -14,7 +14,7 @@ import React, { useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import axios from "axios";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const login = () => {
   const [email, setEmail] = useState("");
@@ -24,7 +24,7 @@ const login = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = await AsyncStorage.getItem("authToken");
+        const token = await AsyncStorage.getItem("Token");
         if (token) {
           router.replace("(tabs)/home");
         }
@@ -35,18 +35,18 @@ const login = () => {
 
     fetchData();
   }, []);
+
   const handleLogin = () => {
     const user = {
       email,
       password,
     };
-    const router = useRouter();
 
     axios
-      .post("http://192.168.0.110:1200/api/login", user)
+      .post(`${process.env.LOCALHOST}/login`, user) // Using the variable from .env file
       .then((response) => {
         const token = response.data.token;
-        AsyncStorage.setItem("authToken", token);
+        AsyncStorage.setItem("Token", token);
         router.replace("(tabs)/home");
         Alert.alert("Login Successful");
       })
@@ -85,6 +85,7 @@ const login = () => {
               style={{ marginLeft: 15, color: "gray" }}
             />
             <TextInput
+              secureTextEntry
               style={styles.textInput}
               value={password}
               onChangeText={setPassword}

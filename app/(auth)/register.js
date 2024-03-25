@@ -40,13 +40,14 @@ const Register = () => {
     };
 
     axios
-      .post("http://192.168.0.110:1200/api/register", user)
+      .post(`${process.env.LOCALHOST}/register`, user)
       .then((response) => {
         console.log(response);
         Alert.alert(
           "Registration Successful",
           "You have successfully registered your account"
         );
+        router.replace("(auth)/login");
         setEmail("");
         setPassword("");
         setUsername("");
