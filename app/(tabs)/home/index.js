@@ -19,9 +19,14 @@ import {
   SlideAnimation,
 } from "react-native-modals";
 import axios from "axios";
+import moment from "moment";
+import { Entypo, Feather } from "@expo/vector-icons";
+
+export const API_URL = "http://192.168.1.106:1200/api/";
 
 const index = () => {
   const [todos, setTodos] = useState([]);
+  const today = moment().format("MMM Do");
   const [isVisible, setIsVisible] = useState(false);
   const [category, setCategory] = useState("All");
   const [todo, setTodo] = useState({});
@@ -40,7 +45,7 @@ const index = () => {
   const getUserTodo = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.1.106:1200/api/users/660190701a989a15d2916822/todos`
+        `${API_URL}/users/660190701a989a15d2916822/todos`
       );
       console.log(response.data.todos);
       setTodos(response.data.todos);
@@ -73,10 +78,7 @@ const index = () => {
       };
 
       await axios
-        .post(
-          `http://192.168.1.106:1200/api/todos/660190701a989a15d2916822`,
-          todoData
-        )
+        .post(`${API_URL}todos/660190701a989a15d2916822`, todoData)
         .then((response) => {
           console.log(response);
         })
@@ -94,9 +96,7 @@ const index = () => {
   const markTodosCompleted = async (todoId) => {
     try {
       setMarked(true);
-      const response = await axios.patch(
-        `http://192.168.1.106:1200/api/todos/${todoId}/complete`
-      );
+      const response = await axios.patch(`${API_URL}/todos/${todoId}/complete`);
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -125,7 +125,33 @@ const index = () => {
       <ScrollView style={styles.scroller}>
         <View style={styles.scrollContainer}>
           {todos?.length > 0 ? (
-            <View>{pendingTodos?.length > 0 && <Text>tasks to Do!</Text>}</View>
+            <View>
+              {pendingTodos?.length > 0 && <Text>tasks to Do! {today}</Text>}
+
+              {pendingTodos?.map((item, index) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={{
+                      backgroundColor: "#e0e0e0",
+                      padding: 10,
+                      borderRadius: 7,
+                      marginVertical: 10,
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 12,
+                      }}>
+                      <Entypo name="circle" size={18} color="black" />
+                      <Text>{item?.title}</Text>
+                      <Feather name="flag" size={18} color="black" />
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
           ) : (
             <View style={styles.noTodoContainer}>
               <Image

@@ -14,6 +14,7 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import axios from "axios";
+import { API_URL } from "../(tabs)/home";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -40,7 +41,7 @@ const Register = () => {
     };
 
     axios
-      .post(`http://192.168.1.106:1200/api//register`, user)
+      .post(`${API_URL}/register`, user)
       .then((response) => {
         console.log(response);
         Alert.alert(
