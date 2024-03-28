@@ -74,7 +74,7 @@ const index = () => {
 
   useEffect(() => {
     getUserTodo();
-  }, [marked]);
+  }, [marked, isVisible]);
 
   const addTodo = async () => {
     try {
@@ -84,13 +84,15 @@ const index = () => {
       };
 
       await axios
-        .post(`${API_URL}todos/660190701a989a15d2916822`, todoData)
+        .post(`${API_URL}/todos/660190701a989a15d2916822`, todoData)
         .then((response) => {
           console.log(response);
         })
         .catch((error) => {
           console.log(error, "here");
         });
+
+      await getUserTodo();
 
       setIsVisible(false);
       setTodo("");
