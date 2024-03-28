@@ -20,7 +20,13 @@ import {
 } from "react-native-modals";
 import axios from "axios";
 import moment from "moment";
-import { Entypo, Feather } from "@expo/vector-icons";
+import {
+  Entypo,
+  Feather,
+  MaterialIcons,
+  FontAwesome,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 
 export const API_URL = "http://192.168.1.106:1200/api/";
 
@@ -68,7 +74,7 @@ const index = () => {
 
   useEffect(() => {
     getUserTodo();
-  }, []);
+  }, [marked]);
 
   const addTodo = async () => {
     try {
@@ -95,9 +101,30 @@ const index = () => {
 
   const markTodosCompleted = async (todoId) => {
     try {
-      setMarked(true);
       const response = await axios.patch(`${API_URL}/todos/${todoId}/complete`);
       console.log(response.data);
+
+      // Find the task to update in either pending or completed todos
+      const updatedTodos = todos.map((todo) => {
+        if (todo._id === todoId) {
+          // Toggle the status of the task
+          todo.status = todo.status === "completed" ? "pending" : "completed";
+        }
+        return todo;
+      });
+
+      // Update the state with the modified todos
+      setTodos(updatedTodos);
+
+      // Update pendingTodos and completedTodos based on the modified todos
+      const updatedPendingTodos = updatedTodos.filter(
+        (todo) => todo.status !== "completed"
+      );
+      const updatedCompletedTodos = updatedTodos.filter(
+        (todo) => todo.status === "completed"
+      );
+      setPendingTodos(updatedPendingTodos);
+      setCompletedTodos(updatedCompletedTodos);
     } catch (error) {
       console.log(error);
     }
@@ -126,7 +153,9 @@ const index = () => {
         <View style={styles.scrollContainer}>
           {todos?.length > 0 ? (
             <View>
-              {pendingTodos?.length > 0 && <Text>tasks to Do! {today}</Text>}
+              {pendingTodos?.length > 0 && (
+                <Text>tasks to Do at - {today}</Text>
+              )}
 
               {pendingTodos?.map((item, index) => {
                 return (
@@ -144,13 +173,95 @@ const index = () => {
                         alignItems: "center",
                         gap: 12,
                       }}>
-                      <Entypo name="circle" size={18} color="black" />
-                      <Text>{item?.title}</Text>
-                      <Feather name="flag" size={18} color="black" />
+                      <Entypo
+                        onPress={() => markTodosCompleted(item?._id)}
+                        name="circle"
+                        size={18}
+                        color="black"
+                      />
+                      <Text style={{ flex: 1 }}>{item?.title}</Text>
+                      <MaterialCommunityIcons
+                        name="flag-variant-outline"
+                        size={18}
+                        color="gray"
+                      />
                     </View>
                   </TouchableOpacity>
                 );
               })}
+
+              {completedTodos?.length > 0 && (
+                <View>
+                  <View
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      margin: 10,
+                    }}>
+                    <Image
+                      style={{ width: 100, height: 100 }}
+                      source={{
+                        uri: "https://cdn-icons-png.flaticon.com/512/7518/7518748.png",
+                      }}
+                    />
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 5,
+                      marginVertical: 10,
+                    }}>
+                    <Text>Completed Tasks</Text>
+                    <MaterialIcons
+                      name="arrow-drop-down"
+                      size={18}
+                      color="black"
+                    />
+                  </View>
+
+                  {completedTodos?.map((item, index) => {
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        style={{
+                          backgroundColor: "#e0e0e0",
+                          padding: 10,
+                          borderRadius: 7,
+                          marginVertical: 10,
+                        }}>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 12,
+                          }}>
+                          <FontAwesome
+                            onPress={() => markTodosCompleted(item?._id)}
+                            name="circle"
+                            size={18}
+                            color="gray"
+                          />
+                          <Text
+                            style={{
+                              textDecorationLine: "line-through",
+                              flex: 1,
+                              color: "gray",
+                            }}>
+                            {item?.title}
+                          </Text>
+                          <MaterialCommunityIcons
+                            name="flag-variant"
+                            size={18}
+                            color="gray"
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              )}
             </View>
           ) : (
             <View style={styles.noTodoContainer}>
