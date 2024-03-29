@@ -70,4 +70,42 @@ router.patch("/todos/:todoId/complete", async (req, res) => {
   } catch (error) {}
 });
 
+router.get("/todos/completed/:date", async (req, res) => {
+  try {
+    const date = req.params.date;
+
+    const completedTodos = await Todo.find({
+      status: "completed",
+      createdAt: {
+        $gte: new Date(date),
+        $lt: new Date(new Date(date).getTime() + 24 * 60 * 60 * 1000),
+      },
+    }).exec();
+
+    res.status(200).json({ completedTodos });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: err.message });
+  }
+});
+
+router.get("/todos/count", async (req, res) => {
+  try {
+    const totalCompletedTodos = await Todo.countDocuments({
+      status: "completed",
+    }).exec();
+
+    const totalPendingTodos = await Todo.countDocuments({
+      status: "pending",
+    }).exec();
+
+    res.status(200).json({
+      totalCompletedTodos,
+      totalPendingTodos,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: err.message });
+  }
+});
 module.exports = router;
