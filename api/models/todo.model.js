@@ -23,8 +23,11 @@ const todoSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now,
+    default: Date.now, // Use Date.now() to get the current date and time
+    timezone: "Asia/Dhaka", // Set the timezone explicitly to Dhaka, Bangladesh
   },
 });
+
+module.exports = mongoose.model("Todo", todoSchema);
 
 module.exports = mongoose.model("Todo", todoSchema);

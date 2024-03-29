@@ -39,7 +39,3 @@ app.listen(port, () => {
 app.use("/api", registerRoutes);
 app.use("/api", loginRoutes);
 app.use("/api", todoRoutes);
-
-app.get("/api/demo", (req, res) => {
-  res.status(200).send({ message: "Hello from the demo API!" });
-});

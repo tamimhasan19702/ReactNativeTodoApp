@@ -104,7 +104,6 @@ const index = () => {
   const markTodosCompleted = async (todoId) => {
     try {
       const response = await axios.patch(`${API_URL}/todos/${todoId}/complete`);
-      console.log(response.data);
 
       // Find the task to update in either pending or completed todos
       const updatedTodos = todos.map((todo) => {
@@ -132,8 +131,6 @@ const index = () => {
     }
   };
 
-  console.log("completed todos", completedTodos);
-  console.log("pending todos", pendingTodos);
   return (
     <>
       <View style={styles.container}>

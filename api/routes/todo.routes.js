@@ -77,15 +77,14 @@ router.get("/todos/completed/:date", async (req, res) => {
     const completedTodos = await Todo.find({
       status: "completed",
       createdAt: {
-        $gte: new Date(date),
-        $lt: new Date(new Date(date).getTime() + 24 * 60 * 60 * 1000),
+        $gte: new Date(`${date}T00:00:00.000Z`), // Start of the selected date
+        $lt: new Date(`${date}T23:59:59.999Z`), // End of the selected date
       },
     }).exec();
 
     res.status(200).json({ completedTodos });
-  } catch (err) {
-    console.log(err);
-    res.status(500).send({ message: err.message });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
   }
 });
 
@@ -108,4 +107,5 @@ router.get("/todos/count", async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 });
+
 module.exports = router;
