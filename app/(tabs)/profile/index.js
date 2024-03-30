@@ -1,9 +1,10 @@
 /** @format */
 
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
 const index = () => {
+  const [completedTasks, setCompletedTasks] = useState([]);
   return (
     <View>
       <Text>profile</Text>

@@ -103,31 +103,38 @@ const index = () => {
 
   const markTodosCompleted = async (todoId) => {
     try {
-      const response = await axios.patch(`${API_URL}/todos/${todoId}/complete`);
-
-      // Find the task to update in either pending or completed todos
-      const updatedTodos = todos.map((todo) => {
-        if (todo._id === todoId) {
-          // Toggle the status of the task
-          todo.status = todo.status === "completed" ? "pending" : "completed";
-        }
-        return todo;
-      });
-
-      // Update the state with the modified todos
-      setTodos(updatedTodos);
-
-      // Update pendingTodos and completedTodos based on the modified todos
-      const updatedPendingTodos = updatedTodos.filter(
-        (todo) => todo.status !== "completed"
+      // Make a PATCH request to toggle the status of the todo using the toggleStatus route
+      const response = await axios.patch(
+        `${API_URL}/todos/${todoId}/toggleStatus`
       );
-      const updatedCompletedTodos = updatedTodos.filter(
-        (todo) => todo.status === "completed"
-      );
-      setPendingTodos(updatedPendingTodos);
-      setCompletedTodos(updatedCompletedTodos);
+
+      // Ensure the PATCH request was successful
+      if (response.status === 200) {
+        // Update the state with the modified todo
+        const updatedTodo = response.data.todo;
+        const updatedTodos = todos.map((todo) => {
+          if (todo._id === updatedTodo._id) {
+            return updatedTodo;
+          }
+          return todo;
+        });
+
+        // Update pendingTodos and completedTodos based on the modified todos
+        const updatedPendingTodos = updatedTodos.filter(
+          (todo) => todo.status !== "completed"
+        );
+        const updatedCompletedTodos = updatedTodos.filter(
+          (todo) => todo.status === "completed"
+        );
+
+        setTodos(updatedTodos);
+        setPendingTodos(updatedPendingTodos);
+        setCompletedTodos(updatedCompletedTodos);
+      } else {
+        console.error("Failed to update todo status.");
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Error updating todo status:", error);
     }
   };
 

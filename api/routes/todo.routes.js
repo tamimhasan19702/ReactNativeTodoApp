@@ -49,25 +49,24 @@ router.get("/users/:userId/todos", async (req, res) => {
   }
 });
 
-router.patch("/todos/:todoId/complete", async (req, res) => {
+router.patch("/todos/:todoId/toggleStatus", async (req, res) => {
   try {
     const todoId = req.params.todoId;
-    const updatedTodo = await Todo.findByIdAndUpdate(
-      todoId,
-      {
-        status: "completed",
-      },
-      { new: true }
-    );
 
-    if (!updatedTodo) {
+    // Find the todo by ID
+    const todo = await Todo.findById(todoId);
+    if (!todo) {
       return res.status(404).send({ message: "Todo not found" });
     }
 
-    res
-      .status(200)
-      .send({ message: "Todo updated successfully", todo: updatedTodo });
-  } catch (error) {}
+    // Toggle the status of the todo
+    todo.status = todo.status === "completed" ? "pending" : "completed";
+    await todo.save();
+
+    res.status(200).send({ message: "Todo status updated successfully", todo });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
 });
 
 router.get("/todos/completed/:date", async (req, res) => {
@@ -76,7 +75,7 @@ router.get("/todos/completed/:date", async (req, res) => {
 
     const completedTodos = await Todo.find({
       status: "completed",
-      createdAt: {
+      dueDate: {
         $gte: new Date(`${date}T00:00:00.000Z`), // Start of the selected date
         $lt: new Date(`${date}T23:59:59.999Z`), // End of the selected date
       },

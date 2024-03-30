@@ -1,11 +1,12 @@
 /** @format */
 
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { API_URL } from "../home/index";
 import axios from "axios";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const index = () => {
   const today = moment().format("YYYY-MM-DD");
@@ -15,26 +16,74 @@ const index = () => {
   const fetchCompletedTodos = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.1.106:1200/api/todos/completed/${selectedDate}`
+        `${API_URL}/todos/completed/${selectedDate}`
       );
 
       const completedTodos = response.data.completedTodos || [];
       setTodos(completedTodos);
+      console.log(todos);
     } catch (error) {
       console.log("error", error);
     }
   };
   useEffect(() => {
     fetchCompletedTodos();
-  }, [selectedDate]);
-  console.log(todos);
+  }, []);
+
+  const handleDayPress = (day) => {
+    setSelectedDate(day.dateString);
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <Calendar
-        onDayPress={(day) => {
-          setSelectedDate(day.dateString);
+        onDayPress={handleDayPress}
+        markedDates={{
+          [selectedDate]: { selected: true, selectedColor: "#7CB9E8" },
         }}
       />
+
+      <View style={{ marginTop: 20 }}>
+        {todos?.map((item, index) => {
+          return (
+            <TouchableOpacity
+              key={index}
+              style={{
+                backgroundColor: "#e0e0e0",
+                padding: 10,
+                borderRadius: 7,
+                marginVertical: 10,
+              }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 12,
+                }}>
+                <FontAwesome
+                  onPress={() => markTodosCompleted(item?._id)}
+                  name="circle"
+                  size={18}
+                  color="gray"
+                />
+                <Text
+                  style={{
+                    textDecorationLine: "line-through",
+                    flex: 1,
+                    color: "gray",
+                  }}>
+                  {item?.title}
+                </Text>
+                <MaterialCommunityIcons
+                  name="flag-variant"
+                  size={18}
+                  color="gray"
+                />
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     </View>
   );
 };
