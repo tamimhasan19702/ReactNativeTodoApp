@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { Calendar, LocaleConfig } from "react-native-calendars";
-import { API_URL } from "../home/index";
+import { API_URL } from "../home";
 import axios from "axios";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -21,14 +21,13 @@ const index = () => {
 
       const completedTodos = response.data.completedTodos || [];
       setTodos(completedTodos);
-      console.log(todos);
     } catch (error) {
       console.log("error", error);
     }
   };
   useEffect(() => {
     fetchCompletedTodos();
-  }, []);
+  }, [selectedDate]);
 
   const handleDayPress = (day) => {
     setSelectedDate(day.dateString);
