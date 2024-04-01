@@ -27,10 +27,12 @@ import {
   FontAwesome,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 export const API_URL = "http://192.168.1.106:1200/api/";
 
 const index = () => {
+  const router = useRouter();
   const [todos, setTodos] = useState([]);
   const today = moment().format("MMM Do");
   const [isVisible, setIsVisible] = useState(false);
@@ -166,6 +168,18 @@ const index = () => {
               {pendingTodos?.map((item, index) => {
                 return (
                   <TouchableOpacity
+                    onPress={() => {
+                      router?.push({
+                        pathname: "/home/info",
+                        params: {
+                          id: item._id,
+                          title: item?.title,
+                          category: item?.category,
+                          createdAt: item?.createdAt,
+                          dueDate: item?.dueDate,
+                        },
+                      });
+                    }}
                     key={index}
                     style={{
                       backgroundColor: "#e0e0e0",
