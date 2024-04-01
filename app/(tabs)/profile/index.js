@@ -1,6 +1,6 @@
 /** @format */
 
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, Dimensions } from "react-native";
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../home";
 import axios from "axios";
@@ -22,7 +22,7 @@ const index = () => {
 
   useEffect(() => {
     fetchTaskData();
-  });
+  }, []);
   console.log("comp", completedTasks);
   2;
   console.log("pen", pendingTasks);
@@ -90,16 +90,12 @@ const index = () => {
 
       <LineChart
         data={{
-          labels: ["January", "February", "March", "April", "May", "June"],
+          labels: ["Pending Tasks", "Completed Tasks"],
           datasets: [
             {
               data: [
-                Math.random() * 100,
-                Math.random() * 100,
-                Math.random() * 100,
-                Math.random() * 100,
-                Math.random() * 100,
-                Math.random() * 100,
+                pendingTasks.length > 0 ? pendingTasks[0] : 0,
+                completedTasks.length > 0 ? completedTasks[0] : 0,
               ],
             },
           ],

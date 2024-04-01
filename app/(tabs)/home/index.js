@@ -28,7 +28,7 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 
-export const API_URL = "http://192.168.63.129:1200/api/";
+export const API_URL = "http://192.168.1.106:1200/api/";
 
 const index = () => {
   const [todos, setTodos] = useState([]);
