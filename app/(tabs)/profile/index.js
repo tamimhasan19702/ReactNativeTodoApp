@@ -7,8 +7,8 @@ import axios from "axios";
 import { LineChart } from "react-native-chart-kit";
 
 const index = () => {
-  const [completedTasks, setCompletedTasks] = useState([]);
-  const [pendingTasks, setPendingTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState(0);
+  const [pendingTasks, setPendingTasks] = useState(0);
   const fetchTaskData = async () => {
     try {
       const response = await axios.get(`${API_URL}/todos/count`);
@@ -23,9 +23,7 @@ const index = () => {
   useEffect(() => {
     fetchTaskData();
   }, []);
-  console.log("comp", completedTasks);
-  2;
-  console.log("pen", pendingTasks);
+
   return (
     <View style={{ flex: 1, padding: 10, backgroundColor: "white" }}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -93,18 +91,15 @@ const index = () => {
           labels: ["Pending Tasks", "Completed Tasks"],
           datasets: [
             {
-              data: [
-                pendingTasks.length > 0 ? pendingTasks[0] : 0,
-                completedTasks.length > 0 ? completedTasks[0] : 0,
-              ],
+              data: [pendingTasks, completedTasks],
             },
           ],
         }}
-        width={Dimensions.get("window").width} // from react-native
+        width={Dimensions.get("window").width - 20} // from react-native
         height={220}
-        yAxisLabel="$"
-        yAxisSuffix="k"
-        yAxisInterval={1} // optional, defaults to 1
+        // yAxisLabel="$"
+        // yAxisSuffix="k"
+        yAxisInterval={2} // optional, defaults to 1
         chartConfig={{
           backgroundColor: "#e26a00",
           backgroundGradientFrom: "#fb8c00",
@@ -123,10 +118,41 @@ const index = () => {
         }}
         bezier
         style={{
-          marginVertical: 8,
           borderRadius: 16,
         }}
       />
+
+      <View
+        style={{
+          backgroundColor: "#89CFF0",
+          padding: 10,
+          borderRadius: 8,
+          marginTop: 15,
+        }}>
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "600",
+            textAlign: "center",
+            color: "white",
+          }}>
+          Tasks for the next seven days
+        </Text>
+      </View>
+
+      <View
+        style={{
+          marginTop: 10,
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
+        <Image
+          style={{ width: 120, height: 120 }}
+          source={{
+            uri: "https://cdn-icons-png.flaticon.com/128/9537/9537221.png",
+          }}
+        />
+      </View>
     </View>
   );
 };
